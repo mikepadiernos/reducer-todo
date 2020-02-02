@@ -7,13 +7,13 @@ import Task from "./Todo";
 
 const TodoList = () => {
 
-	const { tasks } = useContext(TodoContext);
+	const { state, toggleCompleted, clearCompleted } = useContext(TodoContext);
 
 	return (
 		<>
 			<section id='todo-list-section' className='todo-list-section'>
 				<ul id='todo-list' className='todo-list'>
-				{tasks.map(item => (
+				{state.tasks.map(item => (
 					<Task
 						key={item.id}
 						item={item}
@@ -23,7 +23,10 @@ const TodoList = () => {
 				</ul>
 			</section>
 			<section id='todo-bottom-section' className='todo-bottom-section'>
-				<button className='button button-clear' onClick={props.clearCompleted}>
+				<button
+					className='button button-clear'
+					onClick={clearCompleted}
+				>
 					Clear Completed
 				</button>
 			</section>

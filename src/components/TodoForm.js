@@ -1,19 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import TodoContext from "../contexts/TodoContext";
 
-const TodoForm = props => {
+const TodoForm = () => {
 
-	const [task, setTask] = useState("Test")
-	const [newTask, setNewTask] = useState("");
-
-	const handleChanges = e => {
-		setNewTask(e.target.value);
-	};
-
-	const handleSubmit = e => {
-		e.preventDefault();
-		props.addNewTask(newTask);
-		setNewTask({newTask: ""})
-	};
+	const { newTask, handleChanges, handleSubmit } = useContext(TodoContext);
 
 	return (
 		<section id='todo-form' className='todo-form'>
@@ -22,7 +12,7 @@ const TodoForm = props => {
 					onChange={handleChanges}
 					type="text"
 					name="item"
-					value={props.newTask}
+					value={newTask}
 				/>
 				<button>
 					Add Task
@@ -31,6 +21,6 @@ const TodoForm = props => {
 		</section>
 	)
 
-}
+};
 
 export default TodoForm;

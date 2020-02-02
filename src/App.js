@@ -1,75 +1,76 @@
 // Import React Components
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 
 // Import Contexts
 import TodoContext from "./contexts/TodoContext";
 
 // Import Data source
-import Data from "./data/Data";
+// import Data from "./data/Data";
 
 // Import App Components
-import TodoForm from "./Components/TodoForm";
-import TodoList from "./Components/TodoList";
+import TodoForm from "./components/TodoForm";
+import TodoList from "./components/TodoList";
+
+// Import Reducer(s)
+import { initialState, tasksReducer } from './reducers/App';
 
 function App() {
 
-  const [tasks] = useState(Data);
+  const [ state, dispatch ] = useReducer( tasksReducer, initialState );
 
+  const [ tasks ] = useState(state);
+  // const [ task, setTask] = useState([]);
+  const [ newTask, setNewTask ] = useState("");
 
-  const addNewTask = newItemTask => {
-    const newState = {
-      ...this.state,
-      todoList: [
-        ...this.state.todoList,
-        { task: newItemTask, completed: false, id: Math.floor((Math.random() * 1500000000000) + 1) }
-      ]
-    };
-    this.setState(newState);
+  console.log("state:", state);
+
+  const createNewTask = task => {
+    dispatch({
+      type: "CREATE_NEW_TASK",
+      payload: task
+    });
+    console.log("CREATE_NEW_TASK");
   };
 
   const toggleCompleted = id => {
-    const newState = {
-      ...this.state,
-      todoList: this.state.todoList.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            completed: !item.completed
-          };
-        }
-        return item;
-      })
-    };
-    this.setState(newState);
+    dispatch({
+      type: "TOGGLE_COMPLETED",
+      payload: id
+    });
+    console.log("TOGGLE_COMPLETED");
   };
 
   const clearCompleted = () => {
-    const newState = {
-      ...this.state,
-      todoList: this.state.todoList.filter(item => {
-        return !item.completed;
-      })
-    };
-    this.setState(newState);
+    dispatch({
+      type: "CLEAR_COMPLETED"
+    });
+    console.log("CLEAR_COMPLETED");
+  };
+
+  const handleChanges = e => {
+    setNewTask(e.target.value);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    createNewTask(newTask);
+    setNewTask('');
   };
 
   return (
-    <TodoContext value={{tasks}}>
+    <TodoContext.Provider
+      value={{ state, tasks, newTask, createNewTask, toggleCompleted, clearCompleted, handleChanges, handleSubmit }}
+    >
       <div className='app app-container'>
         <header id='app-header' className='app-header'>
           <h1>My Todo's</h1>
         </header>
         <main id='app-content' className='app-content'>
-          <TodoForm
-            addNewTask={addNewTask}
-          />
-          <TodoList
-            toggleCompleted={toggleCompleted}
-            clearCompleted={clearCompleted}
-          />
+          <TodoForm />
+          <TodoList />
         </main>
       </div>
-    </TodoContext>
+    </TodoContext.Provider>
   );
 
 }
