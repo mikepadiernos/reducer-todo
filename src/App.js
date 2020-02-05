@@ -22,7 +22,7 @@ function App() {
   // const [ task, setTask] = useState([]);
   const [ newTask, setNewTask ] = useState("");
 
-  console.log("state:", state);
+  // console.log("state:", state);
 
   const createNewTask = task => {
     dispatch({
